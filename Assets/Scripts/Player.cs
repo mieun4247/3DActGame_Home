@@ -9,6 +9,18 @@ public class NewBehaviourScript : MonoBehaviour
     public float Speed;
     public GameObject[] Weapon;
     public bool[] hasWeapon;
+    public GameObject[] grenads;
+    public int hasGrenade;
+
+    public int ammo;
+    public int coin;
+    public int health;
+    
+    public int maxAmmo;
+    public int maxCoin;
+    public int maxHealth;
+    public int maxHasGrenade;
+
     float hAxis;
     float vAxis;
 
@@ -176,6 +188,42 @@ public class NewBehaviourScript : MonoBehaviour
             Anim.SetBool("isJump", false);
             isJump = false;
         }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Item") {
+            Item item = other.GetComponent<Item>();
+            switch(item.type) {
+
+                case Item.Type.Ammo:
+                ammo += item.Value;
+                if(ammo > maxAmmo)
+                ammo = maxAmmo;
+                    break;
+
+                case Item.Type.Coin:
+                coin += item.Value;
+                if(coin > maxCoin)
+                coin = maxCoin;
+                    break;
+
+                case Item.Type.Heart:
+                health += item.Value;
+                if(health > maxHealth)
+                health = maxHealth;
+                    break;
+
+                case Item.Type.Grenade:
+                    grenads[hasGrenade].SetActive(true);
+                hasGrenade += item.Value;
+                if(hasGrenade > maxHasGrenade)
+                hasGrenade = maxHasGrenade;
+
+                    break;
+            
+            }
+            Destroy(other.gameObject);
+        }   
     }
     void OnTriggerStay(Collider other)
     {
